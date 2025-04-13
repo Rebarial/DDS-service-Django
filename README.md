@@ -36,3 +36,9 @@ python app/manage.py runserver
 ```
 
 http://localhost:8000/
+
+При необходимости можно выполнить миграции
+```bash
+python app/manage.py makemigrations dds_service
+python app/manage.py migrate
+```

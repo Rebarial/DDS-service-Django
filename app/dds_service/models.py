@@ -1,6 +1,17 @@
 from django.db import models
 
-class BaseTypeModel(models.Model):
+class Base(models.Model):
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        result = f"{self.__class__.__name__}: "
+        for field in self._meta.get_fields():
+            result += f"{field.name} = {getattr(self, field.name)}; "
+        return result
+
+class BaseTypeModel(Base):
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -21,7 +32,7 @@ class Category(BaseTypeModel):
 class Subcategory(BaseTypeModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-class Transaction(models.Model):
+class Transaction(Base):
 
     date_created = models.DateTimeField() 
     status = models.ForeignKey(Status, on_delete=models.CASCADE)

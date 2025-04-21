@@ -3,7 +3,7 @@ from dds_service.models import Subcategory
 from dds_service.forms.subcategories import SubcategoryForm
 
 def list(request):
-    subcategories = Subcategory.objects.all()
+    subcategories = Subcategory.objects.select_related('category').all()
     return render(request, 'subcategories/subcategory_list.html', {'subcategories': subcategories})
 
 def create(request):
@@ -22,7 +22,7 @@ def edit(request, pk):
         form = SubcategoryForm(request.POST, instance=subcategory_instance)
         if form.is_valid():
             form.save()
-            return redirect('categories_list')
+            return redirect('subcategories_list')
     else:
         form = SubcategoryForm(instance=subcategory_instance)
     return render(request, 'subcategories/subcategory_form.html', {'form': form})

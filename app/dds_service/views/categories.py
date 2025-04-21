@@ -3,7 +3,7 @@ from dds_service.models import Category
 from dds_service.forms.categories import CategoryForm
 
 def list(request):
-    categories = Category.objects.all()
+    categories = Category.objects.select_related('type').all()
     return render(request, 'categories/category_list.html', {'categories': categories})
 
 def create(request):

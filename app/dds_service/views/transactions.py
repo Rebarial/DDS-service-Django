@@ -4,7 +4,7 @@ from dds_service.forms.transactions import TransactionForm
 from django.utils import timezone
 
 def list(request):
-    transactions = Transaction.objects.all()
+    transactions = Transaction.objects.select_related('subcategory', 'category', 'type', 'status').all()
     return render(request, 'transactions/transaction_list.html', {'transactions': transactions})
 
 def create(request):
@@ -13,10 +13,12 @@ def create(request):
         form = TransactionForm(request.POST)
         if form.is_valid():
             transaction = form.save(commit=False)
+            print("in transaction")
             if not transaction.date_created:
+                print("im realy created")
                 transaction.date_created = timezone.now()
-                transaction.save()
-                return redirect('transactions/transaction_list')
+            transaction.save()
+            return redirect('/')
     else:
         form = TransactionForm(initial={'date_created': timezone.now()})
         form.date_created = timezone.now().strftime('%Y-%m-%dT%H:%M')

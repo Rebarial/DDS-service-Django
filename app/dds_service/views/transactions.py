@@ -5,8 +5,39 @@ from django.utils import timezone
 from django.db.models import Q
 
 def list(request):
-    transactions = Transaction.objects.select_related('subcategory', 'category', 'type', 'status')
-    return render(request, 'transactions/transaction_list.html', {'transactions': transactions})
+    transaction_status = request.GET.get('status')
+    transaction_type = request.GET.get('type')
+    transaction_category = request.GET.get('category')
+    transaction_subcategory = request.GET.get('subcategory')
+
+    query = Q()
+
+    if transaction_status:
+        query &= Q(status=transaction_status)
+
+    if transaction_type:
+        query &= Q(type=transaction_type)
+
+    if transaction_category:
+        query &= Q(category=transaction_category)
+    
+    if transaction_subcategory:
+        query &= Q(subcategory=transaction_subcategory)
+
+    statuses = Status.objects.all()
+    types = Type.objects.all()
+    categories = Category.objects.all()
+    subcategories = Subcategory.objects.all()
+
+    transactions = Transaction.objects.select_related('subcategory', 'category', 'type', 'status').filter(query)
+
+    return render(request, 'transactions/transaction_list.html', {
+        'transactions': transactions,
+        'statuses': statuses,
+        'types': types,
+        'categories': categories,
+        'subcategories': subcategories,
+        })
 
 def create(request):
 

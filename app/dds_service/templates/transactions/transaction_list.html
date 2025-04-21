@@ -5,6 +5,53 @@
 
 {% block content %}
 <h1 class="text-center">Список транзакций</h1>
+
+<form method="get" action="{% url 'transactions_list' %}" class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="status">Статус:</label>
+            <select name="status" id="status" class="form-control">
+                <option value="">Все</option>
+                {% for s in statuses %}
+                    <option value="{{ s.id }}" {% if s.id|stringformat:"s" in request.GET.status %}selected{% endif %}>{{ s.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="type">Тип:</label>
+            <select name="type" id="type" class="form-control">
+                <option value="">Все</option>
+                {% for t in types %}
+                    <option value="{{ t.id }}" {% if t.id|stringformat:"s" in request.GET.type %}selected{% endif %}>{{ t.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="category">Категория:</label>
+            <select name="category" id="category" class="form-control">
+                <option value="">Все</option>
+                {% for c in categories %}
+                    <option value="{{ c.id }}" {% if c.id|stringformat:"s" in request.GET.category %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="subcategory">Подкатегория:</label>
+            <select name="subcategory" id="subcategory" class="form-control">
+                <option value="">Все</option>
+                {% for sc in subcategories %}
+                    <option value="{{ sc.id }}" {% if sc.id|stringformat:"s" in request.GET.subcategory %}selected{% endif %}>{{ sc.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Фильтровать</button>
+</form>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -37,7 +84,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="7" class="text-center">Нет доступных транзакций.</td>
+            <td colspan="9" class="text-center">Нет доступных транзакций.</td>
         </tr>
         {% endfor %}
     </tbody>

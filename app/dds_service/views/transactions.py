@@ -5,12 +5,16 @@ from django.utils import timezone
 from django.db.models import Q
 
 def list(request):
+    transaction_date_created = request.GET.get('date_created')
     transaction_status = request.GET.get('status')
     transaction_type = request.GET.get('type')
     transaction_category = request.GET.get('category')
     transaction_subcategory = request.GET.get('subcategory')
 
     query = Q()
+
+    if transaction_date_created:
+        query &= Q(date_created=transaction_date_created)
 
     if transaction_status:
         query &= Q(status=transaction_status)

@@ -3,7 +3,7 @@ from dds_service.models import Subcategory
 from dds_service.forms.subcategories import SubcategoryForm
 
 def list(request):
-    subcategories = Subcategory.objects.select_related('category').all()
+    subcategories = Subcategory.objects.select_related('category')
     return render(request, 'subcategories/subcategory_list.html', {'subcategories': subcategories})
 
 def create(request):

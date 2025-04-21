@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from ..models import Transaction, Status, Type, Category, Subcategory
 from dds_service.forms.transactions import TransactionForm
 from django.utils import timezone
+from django.db.models import Q
 
 def list(request):
-    transactions = Transaction.objects.select_related('subcategory', 'category', 'type', 'status').all()
+    transactions = Transaction.objects.select_related('subcategory', 'category', 'type', 'status')
     return render(request, 'transactions/transaction_list.html', {'transactions': transactions})
 
 def create(request):
